@@ -32,6 +32,9 @@ class ApplicantSkill(TimeStampedModel):
     user = ForeignKey('auth.User', on_delete=CASCADE, related_name='skills')
     skill = ForeignKey('Skill', on_delete=CASCADE, related_name='applicants')
 
+class Application(TimeStampedModel):
+    status = CharField(max_length=255)
+
 
 class Skill(TimeStampedModel):
     name = CharField(max_length=255)
@@ -74,3 +77,13 @@ def save_or_create_user_profile(sender, instance, created, **kwargs):
         profile.save()
 
 post_save.connect(save_or_create_user_profile, sender=User)
+
+
+class Proposal(TimeStampedModel):
+    name = CharField(max_length=255)
+    description = CharField(max_length=1024)
+
+
+class Contract(TimeStampedModel):
+    name = CharField(max_length=255)
+    description = CharField(max_length=1024)
