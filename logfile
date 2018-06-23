@@ -1,0 +1,8 @@
+2018-06-23 14:03:47.905 PDT [81001] LOG:  could not translate host name "localhost", service "5432" to address: nodename nor servname provided, or not known
+2018-06-23 14:03:47.905 PDT [81001] WARNING:  could not create listen socket for "localhost"
+2018-06-23 14:03:47.905 PDT [81001] FATAL:  could not create any TCP/IP sockets
+2018-06-23 14:03:47.905 PDT [81001] LOG:  database system is shut down
+2018-06-23 14:06:56.808 PDT [82847] LOG:  could not translate host name "localhost", service "5432" to address: nodename nor servname provided, or not known
+2018-06-23 14:06:56.808 PDT [82847] WARNING:  could not create listen socket for "localhost"
+2018-06-23 14:06:56.808 PDT [82847] FATAL:  could not create any TCP/IP sockets
+2018-06-23 14:06:56.808 PDT [82847] LOG:  database system is shut down
