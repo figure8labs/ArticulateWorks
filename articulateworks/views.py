@@ -33,6 +33,7 @@ def get_jobs(request):
 def get_received_jobs(request):
     return render(request, 'articulateworks/jobs.html')
 
+
 # obviously this will need to be a blackbox api call once we set up a server
 def get_full_database(request):
     if request.user.is_subscriber:
@@ -50,5 +51,13 @@ def get_applicants(request):
 # a requester can see the response to their request
 def get_applications(request):
     return render(request, 'articulateworks/applications.html')
+
+# both perspectives
+
+def get_proposals(request):
+    return render(request, 'articulateworks/proposals.html')
+
+def get_contracts(request):
+    return render(request, 'articulateworks/contracts.html')
 
 

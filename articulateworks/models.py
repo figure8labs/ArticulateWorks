@@ -35,3 +35,13 @@ class Role(TimeStampedModel):
 class Profile(TimeStampedModel):
     name = CharField(max_length=255)
     description = CharField(max_length=1024)
+
+
+class Proposal(TimeStampedModel):
+    name = CharField(max_length=255)
+    description = CharField(max_length=1024)
+
+
+class Contract(TimeStampedModel):
+    name = CharField(max_length=255)
+    description = CharField(max_length=1024)
