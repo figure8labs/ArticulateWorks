@@ -13,6 +13,9 @@ class AdminProfile(TimeStampedModel):
     user = ForeignKey('auth.User', on_delete=CASCADE)
     requester = ForeignKey('Requester', on_delete=CASCADE)
 
+class Application(TimeStampedModel):
+    status = CharField(max_length=255)
+
 
 class Skill(TimeStampedModel):
     name = CharField(max_length=255)
