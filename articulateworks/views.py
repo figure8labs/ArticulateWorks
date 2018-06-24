@@ -4,6 +4,9 @@ from .models import Application
 
 # applicant perspective
 
+def index(request):
+    return render(request, 'articulateworks/home.html')
+
 # a user can fill out an application in response to a requester,
 # this only needs to be done repeatedly if the user does not exist in the remote server
 def create_application(request):

@@ -17,9 +17,14 @@ from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.urls import path
+from articulateworks import views as articulate_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', articulate_views.index, name='index'),
+    path('contracts/', articulate_views.get_contracts, name='contracts'),
+    path('collaborators/', articulate_views.get_applicants, name='collaborators'),
+    path('partners/', articulate_views.get_applicants, name='partners'),
 ]
 
 if settings.DEBUG:
