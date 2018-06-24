@@ -37,8 +37,8 @@ urlpatterns = [
     path('applicantskills/', articulate_views.ApplicantSkillsListView.as_view(), name='userskills_list'),
     path('paypal_openid_login/', articulate_views.paypal_openid_login, name='paypal_openid_login'),
     path('paypal_openid_auth/', articulate_views.paypal_openid_auth, name='paypal_openid_auth'),
-    path('applicant_payment_failure/', articulate_views.applicant_payment_failure, name='applicant_payment_failure'),
-    path('applicant_payment_success/', articulate_views.applicant_payment_success, name='applicant_payment_success')
+    path('merchant_payment_failure/', articulate_views.merchant_payment_failure, name='merchant_payment_failure'),
+    path('merchant_payment_success/', articulate_views.merchant_payment_success, name='merchant_payment_success')
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:

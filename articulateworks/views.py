@@ -207,9 +207,9 @@ def add_task(request):
         )
 
 
-def applicant_payment_success(request):
-    return render(request, 'articulateworks/applicant_payment_success.html')
+def merchant_payment_success(request):
+    return render(request, 'articulateworks/merchant_payment_success.html')
 
 
-def applicant_payment_failure(request):
-    return render(request, 'articulateworks/applicant_payment_failure.html')
+def merchant_payment_failure(request):
+    return render(request, 'articulateworks/merchant_payment_failure.html')
