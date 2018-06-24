@@ -18,8 +18,13 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from django.urls import path
 
+from articulateworks import views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    url(r'', views.home_page),
+    url(r'paypal_openid_login/?', views.paypal_openid_login, name='paypal_openid_login'),
+    url(r'paypal_openid_auth/?', views.paypal_openid_auth, name='paypal_openid_auth'),
 ]
 
 if settings.DEBUG:

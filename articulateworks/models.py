@@ -1,6 +1,6 @@
 # Create your models here.
 from django.contrib.auth.models import User
-from django.db.models import CharField, ManyToManyField, ForeignKey, CASCADE, OneToOneField
+from django.db.models import CharField, ManyToManyField, ForeignKey, CASCADE, OneToOneField, EmailField
 from django.db.models.signals import post_save
 from model_utils.models import TimeStampedModel
 
@@ -14,9 +14,15 @@ def is_iterable(something):
         return True
 
 
+class Invoice(TimeStampedModel):
+    user = ForeignKey('auth.User', on_delete=CASCADE)
+    pass
+
+
 class Requester(TimeStampedModel):
     name = CharField(max_length=255)
     description = CharField(max_length=1024, blank=True)
+    merchant_email = EmailField()
     admins = ManyToManyField('auth.User', related_name='requesters')
 
     @property
@@ -139,6 +145,7 @@ class Requester(TimeStampedModel):
 
 class Profile(TimeStampedModel):
     user = OneToOneField('auth.User', on_delete=CASCADE, related_name='profile')
+    merchant_email = EmailField(max_length=512, help_text='PayPal Merchant Email')
 
     @property
     def skills(self):
@@ -268,10 +275,6 @@ class ApplicantSkill(TimeStampedModel):
     skill = ForeignKey('Skill', on_delete=CASCADE, related_name='applicants')
 
 
-class Application(TimeStampedModel):
-    status = CharField(max_length=255)
-
-
 class Skill(TimeStampedModel):
     name = CharField(max_length=255)
     description = CharField(max_length=1024, blank=True)
@@ -314,6 +317,10 @@ def save_or_create_user_profile(sender, instance, created, **kwargs):
 
 
 post_save.connect(save_or_create_user_profile, sender=User)
+
+
+class Application(TimeStampedModel):
+    status = CharField(max_length=255)
 
 
 class Proposal(TimeStampedModel):

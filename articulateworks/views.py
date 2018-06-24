@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from .forms import ApplicationEntryForm
 from .models import Application
@@ -84,7 +85,15 @@ def counter_proposal(request, id):
 def deny_proposal(request, id):
     return render(request, 'articulateworks/proposals.html')
 
+# Perform PayPal OpenID login
+# https://developer.paypal.com/docs/integration/direct/identity/log-in-with-paypal/
+def paypal_openid_login(request):
+    return render(request, 'articulateworks/login.html')
 
+def paypal_openid_auth(request):
+    # TODO implement
+    pass
 
-
-
+@login_required
+def home_page(request):
+    return render(request, 'articulateworks/home.html')

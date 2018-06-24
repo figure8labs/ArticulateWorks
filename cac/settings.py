@@ -13,8 +13,9 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+import paypalrestsdk
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
@@ -27,8 +28,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
+
+LOGIN_REDIRECT_URL = 'home'
+LOGIN_URL = 'paypal_openid_login'
 
 INSTALLED_APPS = [
     'django.contrib.sites',
@@ -41,6 +44,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'articulateworks',
     'debug_toolbar',
+    "sslserver",
 ]
 
 MIDDLEWARE = [
@@ -75,7 +79,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'cac.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
@@ -88,7 +91,6 @@ DATABASES = {
         'HOST': 'localhost',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
@@ -108,7 +110,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
 
@@ -122,10 +123,17 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/staticfiles/'
 
-INTERNAL_IPS = ('127.0.0.1','0.0.0.0')
+INTERNAL_IPS = ('127.0.0.1', '0.0.0.0')
+
+paypalrestsdk.configure({
+    "mode": os.environ.get('PAYPAL_MODE', "sandbox"),  # sandbox or live
+    "client_id": os.environ.get('PAYPAL_CLIENT_ID', "ARHrnLJmr1c0J7bF5JwJjLQnEoGWJrDetisaDcdaj2dDj_Z_nc9jTFBCqWyAPMYbk_w4U2wmj6p6TuF5"),
+    "client_secret": os.environ.get('PAYPAL_CLIENT_SECRET',
+                                    "EOvb1rTgDJkKah-sraElNvA1h96MNURJuZ_ul8XLn9SpnjscgLsTAd_hVOiLxSQfZIKP5lAm5FC6h6zF"),
+    "openid_redirect_uri": os.environ.get('PAYPAL_OPENID_REDIRECT_URL', 'http://127.0.0.1:8080/paypal_openid_auth/')
+})
