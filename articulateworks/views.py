@@ -8,6 +8,8 @@ from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
+from django.utils.decorators import method_decorator
+from django.views.generic import ListView
 from paypalrestsdk import Tokeninfo
 
 from .forms import ApplicationEntryForm, TaskForm
@@ -165,6 +167,21 @@ def paypal_openid_auth(request):
     # print(userinfo)
     # return render(request, 'articulateworks/home.html')
     return HttpResponseRedirect(redirect_to=reverse('index'))
+
+
+@method_decorator(login_required, name='dispatch')
+class ApplicantSkillsListView(ListView):
+    template_name = 'articulateworks/userskills.html'
+    context_object_name = 'user_skills_list'
+
+    def get_queryset(self):
+        user = User.objects.get(username='janedoe')
+        return user.skill_set.all().order_by('skill__name')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=object_list, **kwargs)
+        context['user'] = User.objects.get(username='janedoe')
+        return context
 
 
 def add_task(request):

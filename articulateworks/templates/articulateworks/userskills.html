@@ -6,10 +6,10 @@
 {% block content %}
     <h1>Applicant, {{ user.first_name }} {{ user.last_name }}, Skill List</h1>
 
-    {% if applicantskill_list %}
+    {% if user_skills_list %}
     <ul>
 
-      {% for applicantskill in applicantskill_list %}
+      {% for applicantskill in user_skills_list %}
       <li>
         <b>{{ applicantskill.skill.name }}</b>
       </li>
