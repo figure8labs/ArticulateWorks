@@ -2,7 +2,7 @@
 {% block main %}
     <h3 class="title">Skills</h3>
     <div class="presentation_table">
-  <div id="paypal-button"></div>
+  <div id="paypal-button-container"></div>
 {% block content %}
     <h1>Applicant, {{ user.first_name }} {{ user.last_name }}, Skill List</h1>
 
@@ -34,26 +34,38 @@
         commit: true, // Show a 'Pay Now' button
 
         payment: function(data, actions) {
+            // Make a call to the REST API to set up the payment
             return actions.payment.create({
                 payment: {
                     transactions: [
                         {
-                            amount: { total: '100.00', currency: 'USD' }
+                            amount: { total: '0.01', currency: 'USD' }
                         }
-                    ]
+                ],
+
+                redirect_urls: {
+                    return_url: 'https://cac-jason-test.herokuapp.com/applicant_payment_success/',
+                    cancel_url: 'https://cac-jason-test.herokuapp.com/applicant_payment_failure/'
+                    }
                 }
             });
         },
 
+        // onAuthorize() is called when the buyer approves the payment
         onAuthorize: function(data, actions) {
-            return actions.payment.execute().then(function(payment) {
-                alert("Payment complete!")
-                // The payment is complete!
-                // You can now show a confirmation message to the customer
-            });
+
+            // Make a call to the REST API to execute the payment
+            return actions.payment.execute().then(function() {
+                actions.redirect();
+            }
+        );
+    },
+
+        onCancel: function(data, actions) {
+            actions.redirect();
         }
 
-    }, '#paypal-button');
-</script>
+    }, '#paypal-button-container');
+ </script>
     </div>
 {% endblock main %}

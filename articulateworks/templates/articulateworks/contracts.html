@@ -20,25 +20,37 @@
         commit: true, // Show a 'Pay Now' button
 
         payment: function(data, actions) {
+            // Make a call to the REST API to set up the payment
             return actions.payment.create({
                 payment: {
                     transactions: [
                         {
-                            amount: { total: '100.00', currency: 'USD' }
+                            amount: { total: '55.18', currency: 'USD' }
                         }
-                    ]
+                ],
+
+                redirect_urls: {
+                    return_url: 'https://cac-jason-test.herokuapp.com/applicant_payment_success/',
+                    cancel_url: 'https://cac-jason-test.herokuapp.com/applicant_payment_failure/'
+                    }
                 }
             });
         },
 
+        // onAuthorize() is called when the buyer approves the payment
         onAuthorize: function(data, actions) {
-            return actions.payment.execute().then(function(payment) {
-                alert("Payment complete!")
-                // The payment is complete!
-                // You can now show a confirmation message to the customer
-            });
+
+            // Make a call to the REST API to execute the payment
+            return actions.payment.execute().then(function() {
+                actions.redirect();
+            }
+        );
+    },
+
+        onCancel: function(data, actions) {
+            actions.redirect();
         }
 
-    }, '#paypal-button');
+    }, '#paypal-button-container');
 </script>
 {% endblock main %}

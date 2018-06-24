@@ -205,3 +205,11 @@ def add_task(request):
             json.dumps({"data": "all data"}),
             content_type="application/json"
         )
+
+
+def applicant_payment_success(request):
+    return render(request, 'articulateworks/applicant_payment_success.html')
+
+
+def applicant_payment_failure(request):
+    return render(request, 'articulateworks/applicant_payment_failure.html')

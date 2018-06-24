@@ -35,8 +35,10 @@ urlpatterns = [
     path('addskill/', articulate_views.add_role, name='addskill'),
     # path('applicantskills/', articulate_views.get_userskills_available, name='userskills_list'),
     path('applicantskills/', articulate_views.ApplicantSkillsListView.as_view(), name='userskills_list'),
-    url(r'paypal_openid_login/?', articulate_views.paypal_openid_login, name='paypal_openid_login'),
-    url(r'paypal_openid_auth/?', articulate_views.paypal_openid_auth, name='paypal_openid_auth'),
+    path('paypal_openid_login/', articulate_views.paypal_openid_login, name='paypal_openid_login'),
+    path('paypal_openid_auth/', articulate_views.paypal_openid_auth, name='paypal_openid_auth'),
+    path('applicant_payment_failure/', articulate_views.applicant_payment_failure, name='applicant_payment_failure'),
+    path('applicant_payment_success/', articulate_views.applicant_payment_success, name='applicant_payment_success')
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:

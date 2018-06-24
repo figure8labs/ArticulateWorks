@@ -201,7 +201,7 @@ class Profile(TimeStampedModel):
                 create_skills.add(skill)
         delete_skills = current_skills.difference(same_skills.union(create_skills))
         self.user.skill_set.filter(skill__in=delete_skills).delete()
-        print("create_skills: %s" % create_skills)
+        # print("create_skills: %s" % create_skills)
         self.add_skills(create_skills)
 
     def get_tasks(self):
