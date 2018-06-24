@@ -30,6 +30,10 @@ class ArticulateTests(TestCase):
         user_skill_names = {skill.skill.name for skill in user.skills.all()}
         self.assertTrue(user_skill_names.union({skill.name, "Django development"}))
 
+        # Simplest to use profile.skills virtual attribute
+        user.profile.skills = Skill.objects.create(name='Large vehicle driver')
+        self.assertEqual(len(user.profile.skills), 1)
+
     def test_update_tasks(self):
         user = self.user
         task = self.task
@@ -41,6 +45,10 @@ class ArticulateTests(TestCase):
         user_task_names = {task.task.name for task in user.tasks.all()}
         self.assertTrue(user_task_names.union({task.name, "Fix copier"}))
 
+        # Simplest to use profile.tasks virtual attribute
+        user.profile.tasks = Task.objects.create(name='Drive van to New York')
+        self.assertEqual(len(user.profile.tasks), 1)
+
     def test_update_roles(self):
         user = self.user
         role = self.role
@@ -51,3 +59,7 @@ class ArticulateTests(TestCase):
         self.assertEqual(user.roles.count(), 2)
         user_role_names = {role.role.name for role in user.roles.all()}
         self.assertTrue(user_role_names.union({role.name, "Splunk admin"}))
+
+        # Simplest to use profile.roles virtual attribute
+        user.profile.roles = Role.objects.create(name='HR manager')
+        self.assertEqual(len(user.profile.roles), 1)

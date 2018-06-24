@@ -23,6 +23,33 @@ class Requester(TimeStampedModel):
 class Profile(TimeStampedModel):
     user = OneToOneField('auth.User', on_delete=CASCADE, related_name='profile')
 
+    @property
+    def skills(self):
+        return self.get_skills()
+
+    @property
+    def tasks(self):
+        return self.get_tasks()
+
+    @property
+    def roles(self):
+        return self.get_roles()
+
+    @skills.setter
+    def skills(self, value):
+        return self.update_skills(value)
+
+    @tasks.setter
+    def tasks(self, value):
+        return self.update_tasks(value)
+
+    @roles.setter
+    def roles(self, value):
+        return self.update_roles(value)
+
+    def get_skills(self):
+        return [skill.skill for skill in self.user.skills.all()]
+
     def add_skills(self, skills):
         """Use add append the skills that do not already exist"""
         if not isinstance(skills, list):
@@ -35,7 +62,7 @@ class Profile(TimeStampedModel):
 
     def update_skills(self, skills):
         """Use update to set the skills to exactly the list you pass in"""
-        current_skills = set([skill.skill for skill in self.user.skills.all()])
+        current_skills = set(self.skills)
         create_skills = set()
         same_skills = set()
         if not is_iterable(skills):
@@ -51,6 +78,9 @@ class Profile(TimeStampedModel):
         self.user.skills.filter(skill__in=delete_skills).delete()
         self.add_skills(create_skills)
 
+    def get_tasks(self):
+        return [task.task for task in self.user.tasks.all()]
+
     def add_tasks(self, tasks):
         """Use add append the tasks that do not already exist"""
         if not isinstance(tasks, list):
@@ -63,7 +93,7 @@ class Profile(TimeStampedModel):
 
     def update_tasks(self, tasks):
         """Use update to set the tasks to exactly the list you pass in"""
-        current_tasks = set([task.task for task in self.user.tasks.all()])
+        current_tasks = set(self.tasks)
         create_tasks = set()
         same_tasks = set()
         if not is_iterable(tasks):
@@ -79,6 +109,9 @@ class Profile(TimeStampedModel):
         self.user.tasks.filter(task__in=delete_tasks).delete()
         self.add_tasks(create_tasks)
 
+    def get_roles(self):
+        return [role.role for role in self.user.roles.all()]
+
     def add_roles(self, roles):
         """Use add append the roles that do not already exist"""
         if not isinstance(roles, list):
@@ -91,7 +124,7 @@ class Profile(TimeStampedModel):
 
     def update_roles(self, roles):
         """Use update to set the roles to exactly the list you pass in"""
-        current_roles = set([role.role for role in self.user.roles.all()])
+        current_roles = set(self.roles)
         create_roles = set()
         same_roles = set()
         if not is_iterable(roles):
