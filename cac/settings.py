@@ -135,5 +135,5 @@ paypalrestsdk.configure({
     "client_id": os.environ.get('PAYPAL_CLIENT_ID', "ARHrnLJmr1c0J7bF5JwJjLQnEoGWJrDetisaDcdaj2dDj_Z_nc9jTFBCqWyAPMYbk_w4U2wmj6p6TuF5"),
     "client_secret": os.environ.get('PAYPAL_CLIENT_SECRET',
                                     "EOvb1rTgDJkKah-sraElNvA1h96MNURJuZ_ul8XLn9SpnjscgLsTAd_hVOiLxSQfZIKP5lAm5FC6h6zF"),
-    "openid_redirect_uri": os.environ.get('PAYPAL_OPENID_REDIRECT_URL', 'http://127.0.0.1:8080/paypal_openid_auth/')
+    "openid_redirect_uri": os.environ.get('PAYPAL_OPENID_REDIRECT_URL', 'https://127.0.0.1:8080/paypal_openid_auth/')
 })
