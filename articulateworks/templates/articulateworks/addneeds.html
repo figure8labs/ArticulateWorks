@@ -3,25 +3,17 @@
     <h3 class="title">Create your job board</h3>
     <div class="presentation_table">
         <a href="{% url 'addrole' %}"><h3 class="presentation">add a role</h3></a>
-        {% if newrole %}{{ newrole }}{% endif %}
         <a href="{% url 'addtask' %}"><h3 class="presentation">add a task</h3></a>
-
-    <form action="/addtask/" method="POST" id="post-form"><form method="POST" id="post-form">
+        <a href="{% url 'addskill' %}"><h3 class="presentation">add a skill</h3></a>
+    </div>
+    {% if newrole %}{{ newrole }}{% endif %}
+     <form action="/addtask/" method="POST" id="TaskForm"><form method="POST" id="TaskForm">
     {% csrf_token %}
     <div class="fieldWrapper" id="task">
         <ul id="talk"></ul>
-        {{ form.text }}
+        {{ form.description }}
     </div>
     <div id="results"></div> <!-- errors go here -->
     <input type="submit" value="Post" class="tiny button">
 </form>
-
-        <a href="{% url 'addskill' %}"><h3 class="presentation">add a skill</h3></a>
-        <script>success : function(json) {
-    $('#post-text').val(''); // remove the value from the input
-    console.log(json); // log the returned json to the console
-    $("#talk").prepend("<li><strong>"+json.text+"</strong> - <em> "+json.author+"</em> - <span> "+json.created+"</span></li>");
-    console.log("success"); // another sanity check
-},</script>
-    </div>
 {% endblock main %}

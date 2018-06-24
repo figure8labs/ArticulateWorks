@@ -86,7 +86,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'cacdb',
-        'USER': 'cac',
+        'USER': 'cac2',
         'PASSWORD': 'testing123',
         'HOST': 'localhost',
     }

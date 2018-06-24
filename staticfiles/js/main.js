@@ -4,7 +4,7 @@ function add_task() {
     $.ajax({
         url : "add_task/", // the endpoint
         type : "POST", // http method
-        data : { the_post : $('#task').val() }, // data sent with the post request
+        data : { task : $('#task').val() }, // data sent with the post request
 
         // handle a successful response
         success : function(json) {
