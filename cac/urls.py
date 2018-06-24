@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.conf import settings
 from django.conf.urls import include, url
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 from articulateworks import views as articulate_views
@@ -32,10 +33,11 @@ urlpatterns = [
     path('addrole/', articulate_views.add_role, name='addrole'),
     path('addtask/', articulate_views.add_role, name='addtask'),
     path('addskill/', articulate_views.add_role, name='addskill'),
-    path('applicantskills/', articulate_views.get_userskills_available, name='userskills_list'),
+    # path('applicantskills/', articulate_views.get_userskills_available, name='userskills_list'),
+    path('applicantskills/', articulate_views.ApplicantSkillsListView.as_view(), name='userskills_list'),
     url(r'paypal_openid_login/?', articulate_views.paypal_openid_login, name='paypal_openid_login'),
     url(r'paypal_openid_auth/?', articulate_views.paypal_openid_auth, name='paypal_openid_auth'),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:
     import debug_toolbar

@@ -24,7 +24,7 @@ class Requester(TimeStampedModel):
     name = CharField(max_length=255)
     description = CharField(max_length=1024, blank=True)
     merchant_email = EmailField()
-    admins = ManyToManyField('auth.User', related_name='requesters')
+    admins = ManyToManyField('auth.User', related_name='requester_set')
 
     @property
     def skills(self):
@@ -269,7 +269,7 @@ class Profile(TimeStampedModel):
 
 class RequesterSkill(TimeStampedModel):
     requester = ForeignKey('Requester', on_delete=CASCADE, related_name='skill_set')
-    skill = ForeignKey('Skill', on_delete=CASCADE, related_name='requesters')
+    skill = ForeignKey('Skill', on_delete=CASCADE, related_name='requesterskill_set')
 
 
 class ApplicantSkill(TimeStampedModel):
@@ -280,15 +280,16 @@ class ApplicantSkill(TimeStampedModel):
         return reverse('applicantskill-list', args=[str(self.id)])
 
 
-
 class Skill(TimeStampedModel):
     name = CharField(max_length=255)
     description = CharField(max_length=1024, blank=True)
+    users = ManyToManyField('auth.User', through='ApplicantSkill', related_name='applicant_skills')
+    requesters = ManyToManyField('Requester', through='RequesterSkill', related_name='requester_skills')
 
 
 class RequesterTask(TimeStampedModel):
     requester = ForeignKey('Requester', on_delete=CASCADE, related_name='task_set')
-    task = ForeignKey('Task', on_delete=CASCADE, related_name='requesters')
+    task = ForeignKey('Task', on_delete=CASCADE, related_name='requestertask_set')
 
 
 class ApplicantTask(TimeStampedModel):
@@ -299,11 +300,13 @@ class ApplicantTask(TimeStampedModel):
 class Task(TimeStampedModel):
     name = CharField(max_length=255)
     description = CharField(max_length=1024, blank=True)
+    users = ManyToManyField('auth.User', through='ApplicantTask', related_name='applicant_tasks')
+    requesters = ManyToManyField('Requester', through='RequesterTask', related_name='requester_tasks')
 
 
 class RequesterRole(TimeStampedModel):
     requester = ForeignKey('Requester', on_delete=CASCADE, related_name='role_set')
-    role = ForeignKey('Role', on_delete=CASCADE, related_name='requesters')
+    role = ForeignKey('Role', on_delete=CASCADE, related_name='requesterrole_set')
 
 
 class ApplicantRole(TimeStampedModel):
@@ -314,6 +317,8 @@ class ApplicantRole(TimeStampedModel):
 class Role(TimeStampedModel):
     name = CharField(max_length=255)
     description = CharField(max_length=1024, blank=True)
+    users = ManyToManyField('auth.User', through='ApplicantRole', related_name='applicant_roles')
+    requesters = ManyToManyField('Requester', through='RequesterRole', related_name='requester_roles')
 
 
 def save_or_create_user_profile(sender, instance, created, **kwargs):

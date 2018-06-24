@@ -3,12 +3,14 @@ certifi==2018.4.16
 cffi==1.11.5
 chardet==3.0.4
 cryptography==2.2.2
+dj-database-url==0.5.0
 Django==2.0.6
 django-debug-toolbar==1.9.1
 django-extensions==2.0.7
 django-model-utils==3.1.2
 django-sslserver==0.20
 docopt==0.6.2
+gunicorn==19.8.1
 idna==2.7
 jedi==0.12.0
 parso==0.2.1
@@ -32,3 +34,4 @@ virtualenv==16.0.0
 virtualenv-clone==0.3.0
 virtualenvwrapper==4.8.2
 wcwidth==0.1.7
+whitenoise==3.3.1
