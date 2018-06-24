@@ -1,9 +1,11 @@
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from .forms import ApplicationEntryForm
+from .forms import ApplicationEntryForm, AddNeedsForm
 from .models import Application
 
 # applicant perspective
+
+def index(request):
+    return render(request, 'articulateworks/home.html')
 
 # a user can fill out an application in response to a requester,
 # this only needs to be done repeatedly if the user does not exist in the remote server
@@ -16,13 +18,13 @@ def create_application(request):
     return render(request, 'articulateworks/new_application.html', {'form': form})
 
 # send application, if an applicant already has a saved application instance from the remote server
-def send_application(request, id):
+def send_application(request, id=None):
     if request.method == 'POST':
         application = Application()
         application.save()
     else:
         form = ApplicationEntryForm
-    return render(request, 'articulateworks/send_application.html', {'form': form})
+    return render(request, 'articulateworks/application.html', {'form': form})
 
 # a user can see the list of tasks needed from a requester
 def get_tasks_needed(request):
@@ -57,11 +59,23 @@ def get_full_database(request):
 
 # a requester can see the profile of who has applied to their requests
 def get_applicants(request):
-    return render(request, 'articulateworks/applicants.html')
+    applicants = ['alexis', 'jordan', 'ryan', 'anna']
+    return render(request, 'articulateworks/applicants.html', {'applicants': applicants})
+
+# this is where the requester adds their needs
+def add_needs(request):
+    form = AddNeedsForm
+    return render(request, 'articulateworks/addneeds.html', {'form': form})
 
 # a requester can see the response to their request
 def get_applications(request):
-    return render(request, 'articulateworks/applications.html')
+    applications = ['application1', 'application2', 'application3', 'application4']
+    return render(request, 'articulateworks/applications.html', {'applications':applications})
+
+# a user wants to create a new role for their entity/company
+def add_role(request):
+    newrole = 'Backend Developer'
+    return render(request, 'articulateworks/addneeds.html', {'newrole': newrole})
 
 # both perspectives
 
@@ -94,6 +108,6 @@ def paypal_openid_auth(request):
     # TODO implement
     pass
 
-@login_required
-def home_page(request):
-    return render(request, 'articulateworks/home.html')
+
+
+

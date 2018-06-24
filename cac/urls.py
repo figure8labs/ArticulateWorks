@@ -17,14 +17,23 @@ from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.urls import path
-
-from articulateworks import views
+from articulateworks import views as articulate_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(r'', views.home_page),
-    url(r'paypal_openid_login/?', views.paypal_openid_login, name='paypal_openid_login'),
-    url(r'paypal_openid_auth/?', views.paypal_openid_auth, name='paypal_openid_auth'),
+    path('', articulate_views.index, name='index'),
+    path('proposals/', articulate_views.get_proposals, name='proposals'),
+    path('applications/', articulate_views.get_applications, name='applications'),
+    path('contracts/', articulate_views.get_contracts, name='contracts'),
+    path('addneeds/', articulate_views.add_needs, name='addneeds'),
+    path('collaborators/', articulate_views.get_applicants, name='collaborators'),
+    path('partners/', articulate_views.get_applicants, name='partners'),
+    path('newapplication/', articulate_views.send_application, name='newapplication'),
+    path('addrole/', articulate_views.add_role, name='addrole'),
+    path('addtask/', articulate_views.add_role, name='addtask'),
+    path('addskill/', articulate_views.add_role, name='addskill'),
+    url(r'paypal_openid_login/?', articulate_views.paypal_openid_login, name='paypal_openid_login'),
+    url(r'paypal_openid_auth/?', articulate_views.paypal_openid_auth, name='paypal_openid_auth'),
 ]
 
 if settings.DEBUG:

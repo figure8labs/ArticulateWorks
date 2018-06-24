@@ -1,0 +1,10 @@
+{% extends 'site_base.html' %}
+{% block main %}
+    <h3 class="title">Create your job board</h3>
+    <div class="presentation_table">
+        <a href="{% url 'addrole' %}"><h3 class="presentation">add a role</h3></a>
+        {% if newrole %}{{ newrole }}{% endif %}
+        <a href="{% url 'addtask' %}"><h3 class="presentation">add a task</h3></a>
+        <a href="{% url 'addskill' %}"><h3 class="presentation">add a skill</h3></a>
+    </div>
+{% endblock main %}

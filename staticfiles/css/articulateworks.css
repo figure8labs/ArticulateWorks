@@ -6,3 +6,12 @@ body {
 #wrapper{
     background-color: white;
 }
+#menubar{
+    height: 200px;
+    top:0px;
+    width:100%;
+}
+#menubar ul li {
+    float:left;
+    display: inline;
+}

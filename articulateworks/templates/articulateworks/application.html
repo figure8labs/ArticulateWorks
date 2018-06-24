@@ -1,0 +1,33 @@
+{% extends 'site_base.html' %}
+{% block main %}
+    <h3 class="title">Application</h3>
+    <div class="presentation_table">
+    {% if form %}
+    <form role="form" class="form-horizontal" method="post" action="submit">
+    {% csrf_token %}
+    {{ form.status }}
+   {% for field in form.visible_fields %}
+      <div class="form-group{% if field.errors %} has-error{% endif %}">
+        <label for="{{ field.label }}" class="col-sm-2 control-label gbxlabel" style="float:left; width:auto; margin-right: 5px;">{{ field.label }}</label>
+      {% if field.help_text %}
+            <p>
+          <span class="glyphicon glyphicon-question-sign" style="color: #2bb5e3;" title="{{ field.help_text }}"></span></p>
+        {% endif %}
+        <span style="width: 100%;">{{ field }}</span>
+
+
+        {% for error in field.errors %}
+          <label class="control-label">{{ error }}</label>
+        {% endfor %}
+      </div>
+    {% endfor %}
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary publish">Button</button>
+      <a href="#" class="btn btn-default">Cancel</a>
+    </div>
+  </form>
+    {% endif %}
+
+
+    </div>
+{% endblock main %}
