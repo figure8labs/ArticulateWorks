@@ -18,13 +18,13 @@ def create_application(request):
     return render(request, 'articulateworks/new_application.html', {'form': form})
 
 # send application, if an applicant already has a saved application instance from the remote server
-def send_application(request, id):
+def send_application(request, id=None):
     if request.method == 'POST':
         application = Application()
         application.save()
     else:
         form = ApplicationEntryForm
-    return render(request, 'articulateworks/send_application.html', {'form': form})
+    return render(request, 'articulateworks/application.html', {'form': form})
 
 # a user can see the list of tasks needed from a requester
 def get_tasks_needed(request):
@@ -69,6 +69,10 @@ def add_needs(request):
 def get_applications(request):
     return render(request, 'articulateworks/applications.html')
 
+# a user wants to create a new role for their entity/company
+def add_role(request):
+    return render(request, 'articulateworks/addneeds.html')
+
 # both perspectives
 
 # a user can get a list of all proposals where they are engaged
@@ -90,6 +94,8 @@ def counter_proposal(request, id):
 # a user wants to reject the proposal outright, no negotiation ensues
 def deny_proposal(request, id):
     return render(request, 'articulateworks/proposals.html')
+
+
 
 
 

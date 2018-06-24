@@ -27,6 +27,10 @@ urlpatterns = [
     path('addneeds/', articulate_views.add_needs, name='addneeds'),
     path('collaborators/', articulate_views.get_applicants, name='collaborators'),
     path('partners/', articulate_views.get_applicants, name='partners'),
+    path('newapplication/', articulate_views.send_application, name='newapplication'),
+    path('addrole/', articulate_views.add_role, name='addrole'),
+    path('addtask/', articulate_views.add_role, name='addtask'),
+    path('addskill/', articulate_views.add_role, name='addskill'),
 ]
 
 if settings.DEBUG:
