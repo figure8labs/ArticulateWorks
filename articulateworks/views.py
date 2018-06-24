@@ -4,7 +4,8 @@ from .models import Application
 
 # applicant perspective
 
-# a user can fill out an application in response to a requester
+# a user can fill out an application in response to a requester,
+# this only needs to be done repeatedly if the user does not exist in the remote server
 def create_application(request):
     if request.method == 'POST':
         application = Application()
@@ -12,6 +13,15 @@ def create_application(request):
     else:
         form = ApplicationEntryForm
     return render(request, 'articulateworks/new_application.html', {'form': form})
+
+# send application, if an applicant already has a saved application instance from the remote server
+def send_application(request, id):
+    if request.method == 'POST':
+        application = Application()
+        application.save()
+    else:
+        form = ApplicationEntryForm
+    return render(request, 'articulateworks/send_application.html', {'form': form})
 
 # a user can see the list of tasks needed from a requester
 def get_tasks_needed(request):
@@ -54,10 +64,27 @@ def get_applications(request):
 
 # both perspectives
 
+# a user can get a list of all proposals where they are engaged
 def get_proposals(request):
     return render(request, 'articulateworks/proposals.html')
 
+# a user can get a list of all contracts where they are engaged
 def get_contracts(request):
     return render(request, 'articulateworks/contracts.html')
+
+# a user accepts the whole proposal to create a contract
+def approve_proposal(request, id):
+    return render(request, 'articulateworks/proposals.html')
+
+# a user doesn't want to approve the proposal as-is, but suggest a change
+def counter_proposal(request, id):
+    return render(request, 'articulateworks/proposals.html')
+
+# a user wants to reject the proposal outright, no negotiation ensues
+def deny_proposal(request, id):
+    return render(request, 'articulateworks/proposals.html')
+
+
+
 
 
