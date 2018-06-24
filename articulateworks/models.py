@@ -5,6 +5,15 @@ from django.db.models.signals import post_save
 from model_utils.models import TimeStampedModel
 
 
+def is_iterable(something):
+    try:
+        iter(something)
+    except TypeError:
+        return False
+    else:
+        return True
+
+
 class Requester(TimeStampedModel):
     name = CharField(max_length=255)
     description = CharField(max_length=1024, blank=True)
@@ -15,12 +24,32 @@ class Profile(TimeStampedModel):
     user = OneToOneField('auth.User', on_delete=CASCADE, related_name='profile')
 
     def add_skills(self, skills):
+        """Use add append the skills that do not already exist"""
         if not isinstance(skills, list):
             skills = (skills,)
         for skill in skills:
             if not isinstance(skill, Skill):
                 skill, created = Skill.objects.get_or_create(name=skill)
             self.user.skills.get_or_create(skill=skill)
+        self.user.save()
+
+    def update_skills(self, skills):
+        """Use update to set the skills to exactly the list you pass in"""
+        current_skills = set([skill.skill for skill in self.user.skills.all()])
+        create_skills = set()
+        same_skills = set()
+        if not is_iterable(skills):
+            skills = (skills,)
+        for skill in skills:
+            if not isinstance(skill, Skill):
+                skill, created = Skill.objects.get_or_create(name=skill)
+            if skill in current_skills:
+                same_skills.add(skill)
+            else:
+                create_skills.add(skill)
+        delete_skills = current_skills.difference(same_skills.union(create_skills))
+        self.user.skills.filter(skill__in=delete_skills).delete()
+        self.add_skills(create_skills)
 
 
 class RequesterSkill(TimeStampedModel):
@@ -31,6 +60,7 @@ class RequesterSkill(TimeStampedModel):
 class ApplicantSkill(TimeStampedModel):
     user = ForeignKey('auth.User', on_delete=CASCADE, related_name='skills')
     skill = ForeignKey('Skill', on_delete=CASCADE, related_name='applicants')
+
 
 class Application(TimeStampedModel):
     status = CharField(max_length=255)
@@ -75,6 +105,7 @@ def save_or_create_user_profile(sender, instance, created, **kwargs):
     if created:
         profile = Profile.objects.create(user=instance)
         profile.save()
+
 
 post_save.connect(save_or_create_user_profile, sender=User)
 
