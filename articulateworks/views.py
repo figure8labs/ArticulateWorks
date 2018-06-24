@@ -1,7 +1,9 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponse
 from .forms import ApplicationEntryForm, AddNeedsForm
-from .models import Application
+from .models import Application, Task
+import json
+
 
 # applicant perspective
 
@@ -109,6 +111,29 @@ def paypal_openid_login(request):
 def paypal_openid_auth(request):
     # TODO implement
     pass
+
+def add_task(request):
+    if request.method == 'POST':
+        task = request.POST.get('task')
+        response_data = {}
+
+        task = Task(title=task, description=task)
+        task.save()
+
+        response_data['result'] = 'Create post successful!'
+        response_data['taskpk'] = task.pk
+        response_data['title'] = task
+        response_data['description'] = task
+
+        return HttpResponse(
+            json.dumps(response_data),
+            content_type="application/json"
+        )
+    else:
+        return HttpResponse(
+            json.dumps({"nothing to see": "this isn't happening"}),
+            content_type="application/json"
+        )
 
 
 
