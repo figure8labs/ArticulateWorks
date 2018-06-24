@@ -3,11 +3,10 @@
     <h3 class="title">Contracts</h3>
    <div class="presentation_table">
        {% for contract in contracts %}<div class="columns"><div class="contract_name">{{ contract }}</div>
-       <div class="contract_meter"></div>
-       <div class="contract_pay">Finish Contract and Pay</div></div>{% endfor %}
-    </div>
-  <div id="paypal-button"></div>
-    <script>
+            <div class="contract_meter"></div>
+            <div class="contract_pay">Contract Finished! </div>
+           <div class="contract_pay">Contract Total: $55.80 </div>
+           <div id="paypal-button-container"><script>
     paypal.Button.render({
 
         env: 'sandbox', // Or 'production'
@@ -46,6 +45,12 @@
             }
         );
     },
+
+    }, '#paypal-button');
+</script></div>
+       </div>{% endfor %}
+
+
 
         onCancel: function(data, actions) {
             actions.redirect();

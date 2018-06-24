@@ -121,7 +121,7 @@ def get_proposals(request):
 
 # a user can get a list of all contracts where they are engaged
 def get_contracts(request):
-    contracts = ['contract Employee A', 'contract Collaborator B']
+    contracts = ['Social Media Campaign']
     return render(request, 'articulateworks/contracts.html', {'contracts': contracts})
 
 
