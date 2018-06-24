@@ -4,7 +4,7 @@ from django.forms import widgets
 
 # a user creates a new application in response to a requesters needs
 class ApplicationEntryForm(forms.Form):
-    status = forms.CharField(widget=forms.HiddenInput())
+    status = forms.CharField(widget=forms.CharField)
 
 # a user creates a proposition of work
 class ProposalForm(forms.ModelForm):
@@ -13,3 +13,6 @@ class ProposalForm(forms.ModelForm):
     payment_schedule = forms.CharField(widget=forms.CharField)
     description = forms.CharField(widget=forms.CharField)
 
+# a user creates a new job board object
+class AddNeedsForm(forms.Form):
+    skill = forms.CharField(widget=forms.CharField)

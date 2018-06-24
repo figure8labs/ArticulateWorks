@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .forms import ApplicationEntryForm
+from .forms import ApplicationEntryForm, AddNeedsForm
 from .models import Application
 
 # applicant perspective
@@ -64,7 +64,8 @@ def get_applicants(request):
 
 # this is where the requester adds their needs
 def add_needs(request):
-    return render(request, 'articulateworks/addneeds.html')
+    form = AddNeedsForm
+    return render(request, 'articulateworks/addneeds.html', {'form': form})
 
 # a requester can see the response to their request
 def get_applications(request):
@@ -73,7 +74,8 @@ def get_applications(request):
 
 # a user wants to create a new role for their entity/company
 def add_role(request):
-    return render(request, 'articulateworks/addneeds.html')
+    newrole = 'Backend Developer'
+    return render(request, 'articulateworks/addneeds.html', {'newrole': newrole})
 
 # both perspectives
 
