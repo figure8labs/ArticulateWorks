@@ -1,14 +1,24 @@
 <!-- Use result of DoEC to send the buyer to the correct page -->
- <!DOCTYPE html>
- <html>
-   <head>
-     <title></title>
-     <script>
-       top.window.opener.location = 'https://cac-jason-test.herokuapp.com/';
-     </script>
-   </head>
-   <body>
-     <!-- Include non-JavaScript content here -->
-     If this page does not redirect <a href="https://cac-jason-test.herokuapp.com/">Click Here</a>
-   </body>
- </html>
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script>
+        top.window.opener.location = 'https://cac-jason-test.herokuapp.com/';
+    </script>
+</head>
+<body>
+<!-- Include non-JavaScript content here -->
+If this page does not redirect <a href="https://cac-jason-test.herokuapp.com/">Click Here</a>
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+        if (window.opener) { // check if opened in popup
+            window.close();
+        }
+        if (window != top) {
+            top.location.replace(document.location);
+        }
+    })
+</script>
