@@ -1,5 +1,13 @@
+from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, HttpResponse
+from django.contrib.auth.models import User
+from django.http import HttpResponseRedirect, Http404, HttpResponse
+from django.shortcuts import render
+from django.urls import reverse
+from django_extensions import logging
+from paypalrestsdk import Tokeninfo
+from paypalrestsdk.api import default
+
 from .forms import ApplicationEntryForm, AddNeedsForm
 from .models import Application, Task
 import json
@@ -112,6 +120,29 @@ def paypal_openid_auth(request):
     # TODO implement
     pass
 
+
+    code = request.GET.get('code')
+    if not code:
+        raise Http404()
+    # print("code=%s\n" % code)
+    tokeninfo = Tokeninfo.create(code)
+    # print("access_token=%s\n" % tokeninfo.access_token)
+    userinfo = tokeninfo.userinfo(options={"scope": "openid address profile email https://uri.paypal.com/services/paypalattributes"})
+    first_name, last_name = userinfo.name.split(' ', 2)
+    username = userinfo.user_id
+    email = userinfo.email
+
+    if User.objects.filter(username=username).count() > 0:
+        user = User.objects.get(username=username)
+    else:
+        user = User.objects.create_user(username, email=email, first_name=first_name, last_name=last_name)
+    login(request, user)
+    # print("basic_auth=%s" % default_api.basic_auth())
+    # print(userinfo)
+    # return render(request, 'articulateworks/home.html')
+    return HttpResponseRedirect(redirect_to=reverse('index'))
+
+
 def add_task(request):
     if request.method == 'POST':
         task = request.POST.get('task')
@@ -134,7 +165,4 @@ def add_task(request):
             json.dumps({"nothing to see": "this isn't happening"}),
             content_type="application/json"
         )
-
-
-
 

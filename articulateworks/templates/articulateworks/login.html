@@ -14,10 +14,10 @@ paypal.use( ['login'], function (login) {
   login.render ({
     "appid":"ARHrnLJmr1c0J7bF5JwJjLQnEoGWJrDetisaDcdaj2dDj_Z_nc9jTFBCqWyAPMYbk_w4U2wmj6p6TuF5",
     "authend":"sandbox",
-    "scopes":"openid https://uri.paypal.com/services/invoicing",
+    "scopes":"openid address profile email https://uri.paypal.com/services/invoicing",
     "containerid":"lippButton",
     "locale":"en-us",
-    "returnurl":"https://127.0.0.1:8080/paypal_openid_login"
+    "returnurl":"https://localhost:8080/paypal_openid_auth/"
   });
 });
 </script>

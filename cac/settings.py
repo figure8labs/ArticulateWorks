@@ -86,7 +86,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'cacdb',
-        'USER': 'cac2',
+        'USER': 'cac',
         'PASSWORD': 'testing123',
         'HOST': 'localhost',
     }
@@ -127,8 +127,43 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/staticfiles/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "staticfiles"),
+]
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 INTERNAL_IPS = ('127.0.0.1', '0.0.0.0')
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(name)s %(funcName)s %(process)d %(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            # TODO set default to 'INFO' for production ~Camel
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG' if DEBUG else 'INFO')
+        },
+        'django.db.backends': {
+            # DEBUG spits out a line for every db call, that's a lot most times, default to INFO for now
+            'level': os.getenv('DJANGO_DB_LOG_LEVEL', 'INFO')
+        }
+    },
+}
 
 paypalrestsdk.configure({
     "mode": os.environ.get('PAYPAL_MODE', "sandbox"),  # sandbox or live
