@@ -1,0 +1,59 @@
+{% extends 'site_base.html' %}
+{% block main %}
+    <h3 class="title">Skills</h3>
+    <div class="presentation_table">
+  <div id="paypal-button"></div>
+{% block content %}
+    <h1>Applicant, {{ user.first_name }} {{ user.last_name }}, Skill List</h1>
+
+    {% if applicantskill_list %}
+    <ul>
+
+      {% for applicantskill in applicantskill_list %}
+      <li>
+        <b>{{ applicantskill.skill.name }}</b>
+      </li>
+      {% endfor %}
+
+    </ul>
+    {% else %}
+      <p>There are no skills associated with applicant.</p>
+    {% endif %}
+{% endblock %}
+
+ <script>
+    paypal.Button.render({
+
+        env: 'sandbox', // Or 'production'
+
+        client: {
+            sandbox:    'ARHrnLJmr1c0J7bF5JwJjLQnEoGWJrDetisaDcdaj2dDj_Z_nc9jTFBCqWyAPMYbk_w4U2wmj6p6TuF5',
+            production: 'AYluz6gxsF0nnCDfVyXmsEqzcqdnL38ew14Jm69RVnsekyouTNsaG7h4e2YoD19Ea3EUzrvb__BnfxlN'
+        },
+
+        commit: true, // Show a 'Pay Now' button
+
+        payment: function(data, actions) {
+            return actions.payment.create({
+                payment: {
+                    transactions: [
+                        {
+                            amount: { total: '100.00', currency: 'USD' }
+                        }
+                    ]
+                }
+            });
+        },
+
+        onAuthorize: function(data, actions) {
+            return actions.payment.execute().then(function(payment) {
+                alert("Payment complete!")
+                // The payment is complete!
+                // You can now show a confirmation message to the customer
+            });
+        }
+
+    }, '#paypal-button');
+</script>
+    </div>
+{% endblock main %}

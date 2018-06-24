@@ -2,6 +2,7 @@
 from django.contrib.auth.models import User
 from django.db.models import CharField, ManyToManyField, ForeignKey, CASCADE, OneToOneField, EmailField
 from django.db.models.signals import post_save
+from django.urls import reverse
 from model_utils.models import TimeStampedModel
 
 
@@ -54,7 +55,7 @@ class Requester(TimeStampedModel):
 
     def add_skills(self, skills):
         """Use add append the skills that do not already exist"""
-        if not isinstance(skills, list):
+        if not is_iterable(skills):
             skills = (skills,)
         for skill in skills:
             if not isinstance(skill, Skill):
@@ -85,7 +86,7 @@ class Requester(TimeStampedModel):
 
     def add_tasks(self, tasks):
         """Use add append the tasks that do not already exist"""
-        if not isinstance(tasks, list):
+        if not is_iterable(tasks):
             tasks = (tasks,)
         for task in tasks:
             if not isinstance(task, Task):
@@ -116,7 +117,7 @@ class Requester(TimeStampedModel):
 
     def add_roles(self, roles):
         """Use add append the roles that do not already exist"""
-        if not isinstance(roles, list):
+        if not is_iterable(roles):
             roles = (roles,)
         for role in roles:
             if not isinstance(role, Role):
@@ -176,7 +177,7 @@ class Profile(TimeStampedModel):
 
     def add_skills(self, skills):
         """Use add append the skills that do not already exist"""
-        if not isinstance(skills, list):
+        if not is_iterable(skills):
             skills = (skills,)
         for skill in skills:
             if not isinstance(skill, Skill):
@@ -200,6 +201,7 @@ class Profile(TimeStampedModel):
                 create_skills.add(skill)
         delete_skills = current_skills.difference(same_skills.union(create_skills))
         self.user.skill_set.filter(skill__in=delete_skills).delete()
+        print("create_skills: %s" % create_skills)
         self.add_skills(create_skills)
 
     def get_tasks(self):
@@ -207,7 +209,7 @@ class Profile(TimeStampedModel):
 
     def add_tasks(self, tasks):
         """Use add append the tasks that do not already exist"""
-        if not isinstance(tasks, list):
+        if not is_iterable(tasks):
             tasks = (tasks,)
         for task in tasks:
             if not isinstance(task, Task):
@@ -238,7 +240,7 @@ class Profile(TimeStampedModel):
 
     def add_roles(self, roles):
         """Use add append the roles that do not already exist"""
-        if not isinstance(roles, list):
+        if not is_iterable(roles):
             roles = (roles,)
         for role in roles:
             if not isinstance(role, Role):
@@ -273,6 +275,10 @@ class RequesterSkill(TimeStampedModel):
 class ApplicantSkill(TimeStampedModel):
     user = ForeignKey('auth.User', on_delete=CASCADE, related_name='skill_set')
     skill = ForeignKey('Skill', on_delete=CASCADE, related_name='applicants')
+
+    def get_absolute_url(self):
+        return reverse('applicantskill-list', args=[str(self.id)])
+
 
 
 class Skill(TimeStampedModel):

@@ -4,12 +4,14 @@ from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render
 from django.urls import reverse
+from django.views.generic import ListView
 from django_extensions import logging
 from paypalrestsdk import Tokeninfo
 from paypalrestsdk.api import default
 
 from .forms import ApplicationEntryForm, AddNeedsForm
-from .models import Application
+from .models import Application, ApplicantSkill
+
 
 # applicant perspective
 
@@ -44,6 +46,10 @@ def get_tasks_needed(request):
 def get_skills_needed(request):
     return render(request, 'articulateworks/skills.html')
 
+# a user can see the list of skills needed from a requester
+def get_userskills_available(request):
+    return render(request, 'articulateworks/userskills.html')
+
 # a user can see the full list of needs from a requester
 def get_full_needs(request):
     return render(request, 'articulateworks/needs.html')
@@ -71,6 +77,9 @@ def get_full_database(request):
 def get_applicants(request):
     applicants = ['alexis', 'jordan', 'ryan', 'anna']
     return render(request, 'articulateworks/applicants.html', {'applicants': applicants})
+
+def get_applicantskills(request):
+    return render(request, 'articulateworks/userskills.html', {'user': User.objects.get(username='janedoe')})
 
 # this is where the requester adds their needs
 def add_needs(request):
@@ -135,3 +144,11 @@ def paypal_openid_auth(request):
     # print(userinfo)
     # return render(request, 'articulateworks/home.html')
     return HttpResponseRedirect(redirect_to=reverse('index'))
+
+
+class ApplicantSkillsListView(ListView):
+    model = ApplicantSkill
+    paginate_by = 100
+
+    def get_template_names(self):
+        return super().get_template_names()
