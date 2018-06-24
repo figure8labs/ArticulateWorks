@@ -59,7 +59,8 @@ def get_full_database(request):
 
 # a requester can see the profile of who has applied to their requests
 def get_applicants(request):
-    return render(request, 'articulateworks/applicants.html')
+    applicants = ['alexis', 'jordan', 'ryan', 'anna']
+    return render(request, 'articulateworks/applicants.html', {'applicants': applicants})
 
 # this is where the requester adds their needs
 def add_needs(request):
@@ -67,7 +68,8 @@ def add_needs(request):
 
 # a requester can see the response to their request
 def get_applications(request):
-    return render(request, 'articulateworks/applications.html')
+    applications = ['application1', 'application2', 'application3', 'application4']
+    return render(request, 'articulateworks/applications.html', {'applications':applications})
 
 # a user wants to create a new role for their entity/company
 def add_role(request):

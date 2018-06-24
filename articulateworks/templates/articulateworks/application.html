@@ -2,6 +2,7 @@
 {% block main %}
     <h3 class="title" style="font-family: sans-serif;">Application</h3>
     <div class="presentation_table">
+    {% if form %}
     <form role="form" class="form-horizontal" method="post" action="submit">
     {% csrf_token %}
     {{ form.status }}
@@ -25,6 +26,8 @@
       <a href="#" class="btn btn-default">Cancel</a>
     </div>
   </form>
+    {% endif %}
+
 
     </div>
 {% endblock main %}
