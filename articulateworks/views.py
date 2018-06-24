@@ -61,6 +61,10 @@ def get_full_database(request):
 def get_applicants(request):
     return render(request, 'articulateworks/applicants.html')
 
+# this is where the requester adds their needs
+def add_needs(request):
+    return render(request, 'articulateworks/addneeds.html')
+
 # a requester can see the response to their request
 def get_applications(request):
     return render(request, 'articulateworks/applications.html')

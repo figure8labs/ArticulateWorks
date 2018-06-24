@@ -22,7 +22,9 @@ from articulateworks import views as articulate_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', articulate_views.index, name='index'),
+    path('proposals/', articulate_views.get_proposals, name='proposals'),
     path('contracts/', articulate_views.get_contracts, name='contracts'),
+    path('addneeds/', articulate_views.add_needs, name='addneeds'),
     path('collaborators/', articulate_views.get_applicants, name='collaborators'),
     path('partners/', articulate_views.get_applicants, name='partners'),
 ]
