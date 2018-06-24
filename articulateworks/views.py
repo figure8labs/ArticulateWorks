@@ -165,8 +165,8 @@ def paypal_openid_auth(request):
     login(request, user)
     # print("basic_auth=%s" % default_api.basic_auth())
     # print(userinfo)
-    # return render(request, 'articulateworks/home.html')
-    return HttpResponseRedirect(redirect_to=reverse('index'))
+    return render(request, 'articulateworks/close_lightbox.html')
+    # return HttpResponseRedirect(redirect_to=reverse('index'))
 
 
 @method_decorator(login_required, name='dispatch')
