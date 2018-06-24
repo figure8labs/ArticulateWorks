@@ -1,2 +1,4 @@
 articulateworks/migrations/[a-z0-9]*.py
 .idea
+/.env
+/staticfiles/
