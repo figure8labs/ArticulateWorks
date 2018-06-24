@@ -4,7 +4,8 @@ from .models import Application
 
 # applicant perspective
 
-# a user can fill out an application in response to a requester
+# a user can fill out an application in response to a requester,
+# this only needs to be done repeatedly if the user does not exist in the remote server
 def create_application(request):
     if request.method == 'POST':
         application = Application()
@@ -12,6 +13,15 @@ def create_application(request):
     else:
         form = ApplicationEntryForm
     return render(request, 'articulateworks/new_application.html', {'form': form})
+
+# send application, if an applicant already has a saved application instance from the remote server
+def send_application(request, id):
+    if request.method == 'POST':
+        application = Application()
+        application.save()
+    else:
+        form = ApplicationEntryForm
+    return render(request, 'articulateworks/send_application.html', {'form': form})
 
 # a user can see the list of tasks needed from a requester
 def get_tasks_needed(request):
