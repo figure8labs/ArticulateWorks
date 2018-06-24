@@ -2,9 +2,19 @@
 {% block main %}
     <h3 class="title">Create your job board</h3>
     <div class="presentation_table">
-        <a href="{% url 'addrole' %}"><h3 class="presentation">add a role</h3></a>
-        {% if newrole %}{{ newrole }}{% endif %}
-        <a href="{% url 'addtask' %}"><h3 class="presentation">add a task</h3></a>
-        <a href="{% url 'addskill' %}"><h3 class="presentation">add a skill</h3></a>
+        <div class="columns"><a href="{% url 'addrole' %}"><h3 class="presentation">add a role</h3></a><div class="column">{% if newrole %}{{ newrole }}{% endif %}</div></div>
+        <div class="columns"><a href="{% url 'addtask' %}"><h3 class="presentation">add a task</h3></a></div>
+        <div class="columns"><a href="{% url 'addskill' %}"><h3 class="presentation">add a skill</h3></a></div>
     </div>
+<div class="jobboardrow">
+     <form action="/addtask/" method="POST" id="TaskForm"><form method="POST" id="TaskForm">
+    {% csrf_token %}
+    <div class="fieldWrapper" id="task">
+        <ul id="talk"></ul>
+        {{ form.description }}
+    </div>
+    <div id="results"></div> <!-- errors go here -->
+    <input type="submit" value="Post" class="tiny button">
+</form>
+         </div>
 {% endblock main %}

@@ -1,7 +1,7 @@
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic import ListView
@@ -9,8 +9,9 @@ from django_extensions import logging
 from paypalrestsdk import Tokeninfo
 from paypalrestsdk.api import default
 
-from .forms import ApplicationEntryForm, AddNeedsForm
-from .models import Application, ApplicantSkill
+from .forms import ApplicationEntryForm, AddNeedsForm, TaskForm
+from .models import Application, ApplicantSkill, Task
+import json
 
 
 # applicant perspective
@@ -83,7 +84,7 @@ def get_applicantskills(request):
 
 # this is where the requester adds their needs
 def add_needs(request):
-    form = AddNeedsForm
+    form = TaskForm
     return render(request, 'articulateworks/addneeds.html', {'form': form})
 
 # a requester can see the response to their request
@@ -100,11 +101,13 @@ def add_role(request):
 
 # a user can get a list of all proposals where they are engaged
 def get_proposals(request):
-    return render(request, 'articulateworks/proposals.html')
+    applications = ['application1', 'application2', 'application3', 'application4']
+    return render(request, 'articulateworks/proposals.html', {'proposals': applications})
 
 # a user can get a list of all contracts where they are engaged
 def get_contracts(request):
-    return render(request, 'articulateworks/contracts.html')
+    contracts = ['contract Employee A', 'contract Collaborator B']
+    return render(request, 'articulateworks/contracts.html', {'contracts': contracts})
 
 # a user accepts the whole proposal to create a contract
 def approve_proposal(request, id):
@@ -146,9 +149,25 @@ def paypal_openid_auth(request):
     return HttpResponseRedirect(redirect_to=reverse('index'))
 
 
-class ApplicantSkillsListView(ListView):
-    model = ApplicantSkill
-    paginate_by = 100
+def add_task(request):
+    if request.method == 'POST':
+        task = request.POST.get('description')
+        response_data = {}
 
-    def get_template_names(self):
-        return super().get_template_names()
+        task = Task(title=task, description=task)
+        task.save()
+
+        response_data['result'] = 'Create post successful!'
+        response_data['title'] = request.POST.get('description')
+        response_data['description'] = request.POST.get('description')
+
+        return HttpResponse(
+            json.dumps(response_data),
+            content_type="application/json"
+        )
+    else:
+        return HttpResponse(
+            json.dumps({"data": "all data"}),
+            content_type="application/json"
+        )
+

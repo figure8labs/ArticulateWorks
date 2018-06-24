@@ -2,6 +2,6 @@
 {% block main %}
     <h3 class="title">Proposals</h3>
     <div class="presentation_table">
-
+{% for proposal in proposals %}<div class="columns">{{ proposal }}</div>{% endfor %}
     </div>
 {% endblock main %}

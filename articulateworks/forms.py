@@ -1,6 +1,7 @@
 from django import forms
 from django.forms import ModelForm
 from django.forms import widgets
+from articulateworks.models import Task, Application
 
 # a user creates a new application in response to a requesters needs
 class ApplicationEntryForm(forms.Form):
@@ -16,3 +17,15 @@ class ProposalForm(forms.ModelForm):
 # a user creates a new job board object
 class AddNeedsForm(forms.Form):
     skill = forms.CharField(widget=forms.CharField)
+
+class TaskForm(forms.ModelForm):
+    class Meta:
+        model = Task
+        fields = ['description']
+        widgets = {
+            'description': forms.TextInput(attrs={
+                'id': 'task',
+                'required': True,
+                'placeholder': 'Say something...'
+            }),
+        }

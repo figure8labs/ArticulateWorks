@@ -2,6 +2,8 @@
 {% block main %}
     <h3 class="title">Contracts</h3>
    <div class="presentation_table">
-
+       {% for contract in contracts %}<div class="columns"><div class="contract_name">{{ contract }}</div>
+       <div class="contract_meter"></div>
+       <div class="contract_pay">Finish Contract and Pay</div></div>{% endfor %}
     </div>
 {% endblock main %}
