@@ -51,6 +51,62 @@ class Profile(TimeStampedModel):
         self.user.skills.filter(skill__in=delete_skills).delete()
         self.add_skills(create_skills)
 
+    def add_tasks(self, tasks):
+        """Use add append the tasks that do not already exist"""
+        if not isinstance(tasks, list):
+            tasks = (tasks,)
+        for task in tasks:
+            if not isinstance(task, Task):
+                task, created = Task.objects.get_or_create(name=task)
+            self.user.tasks.get_or_create(task=task)
+        self.user.save()
+
+    def update_tasks(self, tasks):
+        """Use update to set the tasks to exactly the list you pass in"""
+        current_tasks = set([task.task for task in self.user.tasks.all()])
+        create_tasks = set()
+        same_tasks = set()
+        if not is_iterable(tasks):
+            tasks = (tasks,)
+        for task in tasks:
+            if not isinstance(task, Task):
+                task, created = Task.objects.get_or_create(name=task)
+            if task in current_tasks:
+                same_tasks.add(task)
+            else:
+                create_tasks.add(task)
+        delete_tasks = current_tasks.difference(same_tasks.union(create_tasks))
+        self.user.tasks.filter(task__in=delete_tasks).delete()
+        self.add_tasks(create_tasks)
+
+    def add_roles(self, roles):
+        """Use add append the roles that do not already exist"""
+        if not isinstance(roles, list):
+            roles = (roles,)
+        for role in roles:
+            if not isinstance(role, Role):
+                role, created = Role.objects.get_or_create(name=role)
+            self.user.roles.get_or_create(role=role)
+        self.user.save()
+
+    def update_roles(self, roles):
+        """Use update to set the roles to exactly the list you pass in"""
+        current_roles = set([role.role for role in self.user.roles.all()])
+        create_roles = set()
+        same_roles = set()
+        if not is_iterable(roles):
+            roles = (roles,)
+        for role in roles:
+            if not isinstance(role, Role):
+                role, created = Role.objects.get_or_create(name=role)
+            if role in current_roles:
+                same_roles.add(role)
+            else:
+                create_roles.add(role)
+        delete_roles = current_roles.difference(same_roles.union(create_roles))
+        self.user.roles.filter(role__in=delete_roles).delete()
+        self.add_roles(create_roles)
+
 
 class RequesterSkill(TimeStampedModel):
     requester = ForeignKey('Requester', on_delete=CASCADE, related_name='skills')
