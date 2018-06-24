@@ -70,4 +70,16 @@ def get_proposals(request):
 def get_contracts(request):
     return render(request, 'articulateworks/contracts.html')
 
+def approve_proposal(request, id):
+    return render(request, 'articulateworks/proposals.html')
+
+def counter_proposal(request, id):
+    return render(request, 'articulateworks/proposals.html')
+
+def deny_proposal(request, id):
+    return render(request, 'articulateworks/proposals.html')
+
+
+
+
 
