@@ -19,6 +19,123 @@ class Requester(TimeStampedModel):
     description = CharField(max_length=1024, blank=True)
     admins = ManyToManyField('auth.User', related_name='requesters')
 
+    @property
+    def skills(self):
+        return self.get_skills()
+
+    @property
+    def tasks(self):
+        return self.get_tasks()
+
+    @property
+    def roles(self):
+        return self.get_roles()
+
+    @skills.setter
+    def skills(self, value):
+        self.update_skills(value)
+
+    @tasks.setter
+    def tasks(self, value):
+        self.update_tasks(value)
+
+    @roles.setter
+    def roles(self, value):
+        self.update_roles(value)
+
+    def get_skills(self):
+        return [skill.skill for skill in self.skill_set.all()]
+
+    def add_skills(self, skills):
+        """Use add append the skills that do not already exist"""
+        if not isinstance(skills, list):
+            skills = (skills,)
+        for skill in skills:
+            if not isinstance(skill, Skill):
+                skill, created = Skill.objects.get_or_create(name=skill)
+            self.skill_set.get_or_create(skill=skill)
+        self.save()
+
+    def update_skills(self, skills):
+        """Use update to set the skills to exactly the list you pass in"""
+        current_skills = set(self.skills)
+        create_skills = set()
+        same_skills = set()
+        if not is_iterable(skills):
+            skills = (skills,)
+        for skill in skills:
+            if not isinstance(skill, Skill):
+                skill, created = Skill.objects.get_or_create(name=skill)
+            if skill in current_skills:
+                same_skills.add(skill)
+            else:
+                create_skills.add(skill)
+        delete_skills = current_skills.difference(same_skills.union(create_skills))
+        self.skill_set.filter(skill__in=delete_skills).delete()
+        self.add_skills(create_skills)
+
+    def get_tasks(self):
+        return [task.task for task in self.task_set.all()]
+
+    def add_tasks(self, tasks):
+        """Use add append the tasks that do not already exist"""
+        if not isinstance(tasks, list):
+            tasks = (tasks,)
+        for task in tasks:
+            if not isinstance(task, Task):
+                task, created = Task.objects.get_or_create(name=task)
+            self.task_set.get_or_create(task=task)
+        self.save()
+
+    def update_tasks(self, tasks):
+        """Use update to set the tasks to exactly the list you pass in"""
+        current_tasks = set(self.tasks)
+        create_tasks = set()
+        same_tasks = set()
+        if not is_iterable(tasks):
+            tasks = (tasks,)
+        for task in tasks:
+            if not isinstance(task, Task):
+                task, created = Task.objects.get_or_create(name=task)
+            if task in current_tasks:
+                same_tasks.add(task)
+            else:
+                create_tasks.add(task)
+        delete_tasks = current_tasks.difference(same_tasks.union(create_tasks))
+        self.task_set.filter(task__in=delete_tasks).delete()
+        self.add_tasks(create_tasks)
+
+    def get_roles(self):
+        return [role.role for role in self.role_set.all()]
+
+    def add_roles(self, roles):
+        """Use add append the roles that do not already exist"""
+        if not isinstance(roles, list):
+            roles = (roles,)
+        for role in roles:
+            if not isinstance(role, Role):
+                role, created = Role.objects.get_or_create(name=role)
+            self.role_set.get_or_create(role=role)
+        self.save()
+
+    def update_roles(self, roles):
+        """Use update to set the roles to exactly the list you pass in"""
+        current_roles = set(self.roles)
+        create_roles = set()
+        same_roles = set()
+        if not is_iterable(roles):
+            roles = (roles,)
+        for role in roles:
+            if not isinstance(role, Role):
+                role, created = Role.objects.get_or_create(name=role)
+            if role in current_roles:
+                same_roles.add(role)
+            else:
+                create_roles.add(role)
+        delete_roles = current_roles.difference(same_roles.union(create_roles))
+        self.role_set.filter(role__in=delete_roles).delete()
+        self.add_roles(create_roles)
+
 
 class Profile(TimeStampedModel):
     user = OneToOneField('auth.User', on_delete=CASCADE, related_name='profile')
@@ -37,18 +154,18 @@ class Profile(TimeStampedModel):
 
     @skills.setter
     def skills(self, value):
-        return self.update_skills(value)
+        self.update_skills(value)
 
     @tasks.setter
     def tasks(self, value):
-        return self.update_tasks(value)
+        self.update_tasks(value)
 
     @roles.setter
     def roles(self, value):
-        return self.update_roles(value)
+        self.update_roles(value)
 
     def get_skills(self):
-        return [skill.skill for skill in self.user.skills.all()]
+        return [skill.skill for skill in self.user.skill_set.all()]
 
     def add_skills(self, skills):
         """Use add append the skills that do not already exist"""
@@ -57,7 +174,7 @@ class Profile(TimeStampedModel):
         for skill in skills:
             if not isinstance(skill, Skill):
                 skill, created = Skill.objects.get_or_create(name=skill)
-            self.user.skills.get_or_create(skill=skill)
+            self.user.skill_set.get_or_create(skill=skill)
         self.user.save()
 
     def update_skills(self, skills):
@@ -75,11 +192,11 @@ class Profile(TimeStampedModel):
             else:
                 create_skills.add(skill)
         delete_skills = current_skills.difference(same_skills.union(create_skills))
-        self.user.skills.filter(skill__in=delete_skills).delete()
+        self.user.skill_set.filter(skill__in=delete_skills).delete()
         self.add_skills(create_skills)
 
     def get_tasks(self):
-        return [task.task for task in self.user.tasks.all()]
+        return [task.task for task in self.user.task_set.all()]
 
     def add_tasks(self, tasks):
         """Use add append the tasks that do not already exist"""
@@ -88,7 +205,7 @@ class Profile(TimeStampedModel):
         for task in tasks:
             if not isinstance(task, Task):
                 task, created = Task.objects.get_or_create(name=task)
-            self.user.tasks.get_or_create(task=task)
+            self.user.task_set.get_or_create(task=task)
         self.user.save()
 
     def update_tasks(self, tasks):
@@ -106,11 +223,11 @@ class Profile(TimeStampedModel):
             else:
                 create_tasks.add(task)
         delete_tasks = current_tasks.difference(same_tasks.union(create_tasks))
-        self.user.tasks.filter(task__in=delete_tasks).delete()
+        self.user.task_set.filter(task__in=delete_tasks).delete()
         self.add_tasks(create_tasks)
 
     def get_roles(self):
-        return [role.role for role in self.user.roles.all()]
+        return [role.role for role in self.user.role_set.all()]
 
     def add_roles(self, roles):
         """Use add append the roles that do not already exist"""
@@ -119,7 +236,7 @@ class Profile(TimeStampedModel):
         for role in roles:
             if not isinstance(role, Role):
                 role, created = Role.objects.get_or_create(name=role)
-            self.user.roles.get_or_create(role=role)
+            self.user.role_set.get_or_create(role=role)
         self.user.save()
 
     def update_roles(self, roles):
@@ -137,17 +254,17 @@ class Profile(TimeStampedModel):
             else:
                 create_roles.add(role)
         delete_roles = current_roles.difference(same_roles.union(create_roles))
-        self.user.roles.filter(role__in=delete_roles).delete()
+        self.user.role_set.filter(role__in=delete_roles).delete()
         self.add_roles(create_roles)
 
 
 class RequesterSkill(TimeStampedModel):
-    requester = ForeignKey('Requester', on_delete=CASCADE, related_name='skills')
+    requester = ForeignKey('Requester', on_delete=CASCADE, related_name='skill_set')
     skill = ForeignKey('Skill', on_delete=CASCADE, related_name='requesters')
 
 
 class ApplicantSkill(TimeStampedModel):
-    user = ForeignKey('auth.User', on_delete=CASCADE, related_name='skills')
+    user = ForeignKey('auth.User', on_delete=CASCADE, related_name='skill_set')
     skill = ForeignKey('Skill', on_delete=CASCADE, related_name='applicants')
 
 
@@ -161,12 +278,12 @@ class Skill(TimeStampedModel):
 
 
 class RequesterTask(TimeStampedModel):
-    requester = ForeignKey('Requester', on_delete=CASCADE, related_name='tasks')
+    requester = ForeignKey('Requester', on_delete=CASCADE, related_name='task_set')
     task = ForeignKey('Task', on_delete=CASCADE, related_name='requesters')
 
 
 class ApplicantTask(TimeStampedModel):
-    user = ForeignKey('auth.User', on_delete=CASCADE, related_name='tasks')
+    user = ForeignKey('auth.User', on_delete=CASCADE, related_name='task_set')
     task = ForeignKey('Task', on_delete=CASCADE, related_name='applicants')
 
 
@@ -176,12 +293,12 @@ class Task(TimeStampedModel):
 
 
 class RequesterRole(TimeStampedModel):
-    requester = ForeignKey('Requester', on_delete=CASCADE, related_name='roles')
+    requester = ForeignKey('Requester', on_delete=CASCADE, related_name='role_set')
     role = ForeignKey('Role', on_delete=CASCADE, related_name='requesters')
 
 
 class ApplicantRole(TimeStampedModel):
-    user = ForeignKey('auth.User', on_delete=CASCADE, related_name='roles')
+    user = ForeignKey('auth.User', on_delete=CASCADE, related_name='role_set')
     role = ForeignKey('Role', on_delete=CASCADE, related_name='applicants')
 
 
