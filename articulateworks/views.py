@@ -1,13 +1,11 @@
 import json
 
 # applicant perspective
-from django import template
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect, Http404, HttpResponse
+from django.http import Http404, HttpResponse
 from django.shortcuts import render
-from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView
 from paypalrestsdk import Tokeninfo

@@ -22,7 +22,7 @@ from django.urls import path
 from articulateworks import views as articulate_views
 
 urlpatterns = [
-    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('logout/', auth_views.LogoutView.as_view(template_name='articulateworks/logout.html'), name='logout'),
     path('admin/', admin.site.urls),
     path('', articulate_views.index, name='index'),
     path('proposals/', articulate_views.get_proposals, name='proposals'),
